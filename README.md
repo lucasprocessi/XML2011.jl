@@ -9,8 +9,9 @@ A Julia package that implements XML 2011 (DDR) document, as required by Brazilia
 	cnpj = "12345"
 	tipo = XML2011.Inclusao()
 	responsavel = XML2011.Responsavel("Fulano", "555-1234", "fulano@banco.com")
+
 	c1 = XML2011.Conta("123", 5.75)
-	@test XML2011.get_valor(c1) == 5.75
+
 	c2 = XML2011.Conta(
 	    "456",
 	    [
@@ -20,6 +21,7 @@ A Julia package that implements XML 2011 (DDR) document, as required by Brazilia
 	)
 
 	doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1 c2])
+
 	# writes to file ddr.xml
 	XML2011.write_xml("ddr.xml", doc)
 ```

@@ -1,5 +1,4 @@
 
-
 abstract type ElementoDetalhe end
 struct Moeda <: ElementoDetalhe
     codigo::Symbol

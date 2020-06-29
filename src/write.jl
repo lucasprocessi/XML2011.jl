@@ -44,9 +44,6 @@ function add_conta!(node::EzXML.Node, conta::Conta)
 end
 
 function add_detalhe!(node::EzXML.Node, detalhe::DetalheConta)
-    # moeda::Symbol
-    # posicao::Symbol # :onshore ou :offshore
-    # valor::Float64
     dd = addelement!(node, "detalhamentoDDR")
     str_valor = @sprintf("%.2f", round(detalhe.valor, digits=2))
     link!(dd, AttributeNode("valorDetalhe", str_valor))

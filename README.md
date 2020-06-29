@@ -4,26 +4,27 @@ A Julia package that implements XML 2011 (DDR) document, as required by Brazilia
 ## Example
 
 ```julia
-	using XML2011
-	data = Date(2020,1,1)
-	cnpj = "12345"
-	tipo = XML2011.Inclusao()
-	responsavel = XML2011.Responsavel("Fulano", "555-1234", "fulano@banco.com")
+using XML2011
 
-	c1 = XML2011.Conta("123", 5.75)
+data = Date(2020,1,1)
+cnpj = "12345"
+tipo = XML2011.Inclusao()
+responsavel = XML2011.Responsavel("Fulano", "555-1234", "fulano@banco.com")
 
-	c2 = XML2011.Conta(
-	    "456",
-	    [
-	        XML2011.DetalheConta([XML2011.Moeda(:USD), XML2011.Posicao(:onshore)], 10.00),
-	        XML2011.DetalheConta([XML2011.Moeda(:EUR), XML2011.Posicao(:offshore)], 5.10)
-	    ]
-	)
+c1 = XML2011.Conta("123", 5.75)
 
-	doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1 c2])
+c2 = XML2011.Conta(
+    "456",
+    [
+        XML2011.DetalheConta([XML2011.Moeda(:USD), XML2011.Posicao(:onshore)], 10.00),
+        XML2011.DetalheConta([XML2011.Moeda(:EUR), XML2011.Posicao(:offshore)], 5.10)
+    ]
+)
 
-	# writes to file ddr.xml
-	XML2011.write_xml("ddr.xml", doc)
+doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1 c2])
+
+# writes to file ddr.xml
+XML2011.write_xml("ddr.xml", doc)
 ```
 ### Output
 

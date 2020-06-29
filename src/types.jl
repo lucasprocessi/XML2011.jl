@@ -1,42 +1,30 @@
 
+
 abstract type ElementoDetalhe end
 struct Moeda <: ElementoDetalhe
     codigo::Symbol
     function Moeda(codigo::Symbol)
-        @assert codigo in [:USD, :EUR, :GBP, :JPY, :CHF, :XAU, :CAD] "moeda invalida: $codigo"
+        global CONST_MOEDAS
+        @assert codigo in CONST_MOEDAS "moeda invalida: $codigo"
         new(codigo)
     end
 end
 struct Posicao <: ElementoDetalhe
     codigo::Symbol
     function Posicao(codigo::Symbol)
-        @assert codigo in [:onshore, :offshore] "posicao invalida: $codigo"
+        global CONST_POSICOES
+        @assert codigo in CONST_POSICOES "posicao invalida: $codigo. should be :onshore or :offshore"
         new(codigo)
     end
 end
 struct Pais <: ElementoDetalhe
     codigo::Symbol
     function Pais(codigo::Symbol)
-        @assert codigo in [:BR, :US] "pais invalido: $codigo"
+        global CONST_PAISES
+        @assert codigo in CONST_PAISES "pais invalido: $codigo"
         new(codigo)
     end
 end
-
-get_codigo_elemento(::Moeda)::String = "83"
-get_codigo_elemento(::Posicao)::String = "84"
-get_codigo_elemento(::Pais)::String = "81"
-
-get_valor_elemento(m::Moeda) = String(m.codigo)
-function get_valor_elemento(p::Posicao)
-    if p.codigo == :onshore
-        return "1"
-    elseif p.codigo == :offshore
-        return "2"
-    else
-        error("unicorn")
-    end
-end
-get_valor_elemento(p::Pais) = String(p.codigo)
 
 struct DetalheConta
     elementos::Vector{ElementoDetalhe}

@@ -10,5 +10,6 @@ include("moeda.jl")
 include("posicao.jl")
 include("pais.jl")
 include("write.jl")
+include("validate.jl")
 
 end # module

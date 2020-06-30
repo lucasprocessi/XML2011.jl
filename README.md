@@ -1,5 +1,16 @@
 # XML2011.jl
-A Julia package that implements XML 2011 (DDR) document, as required by Brazilian Central Bank (BACEN)
+
+[![License][license-img]](LICENSE)
+[![travis][travis-img]][travis-url]
+[![codecov][codecov-img]][codecov-url]
+
+[license-img]: http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[travis-img]: https://img.shields.io/travis/lucasprocessi/XML2011.jl/master.svg?logo=travis&label=Linux&style=flat-square
+[travis-url]: https://travis-ci.org/lucasprocessi/XML2011.jl
+[codecov-img]: https://img.shields.io/codecov/c/github/lucasprocessi/XML2011.jl/master.svg?label=codecov&style=flat-square
+[codecov-url]: http://codecov.io/github/lucasprocessi/XML2011.jl?branch=master
+
+A Julia package that implements **XML 2011 (DDR) document**, as required by Brazilian Central Bank (BACEN)
 
 ## Example
 

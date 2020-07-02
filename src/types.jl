@@ -87,4 +87,9 @@ struct Doc2011
     tipo::TipoEnvio
     responsavel::Responsavel
     contas::Array{Conta}
+    function Doc2011(data::Date, cnpj::String, tipo::TipoEnvio, responsavel::Responsavel, contas::Array{Conta})
+        doc = new(data, cnpj, tipo, responsavel, contas)
+        validar(doc)
+        return doc
+    end
 end

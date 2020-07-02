@@ -10,10 +10,10 @@ using XML2011
  cnpj = "12345"
  tipo = XML2011.Inclusao()
  responsavel = XML2011.Responsavel("Fulano", "555-1234", "fulano@banco.com")
- c1 = XML2011.Conta("123", 5.75)
+ c1 = XML2011.Conta("503000", 5.75)
  @test XML2011.get_valor(c1) == 5.75
  c2 = XML2011.Conta(
-     "456",
+     "121000",
      [
          XML2011.DetalheConta([XML2011.Moeda(:USD), XML2011.Posicao(:onshore)], 10.00),
          XML2011.DetalheConta([XML2011.Moeda(:EUR), XML2011.Posicao(:offshore)], 5.10)
@@ -38,8 +38,8 @@ using XML2011
      <parametro codigoParametro="33" valorParametro="fulano@banco.com"/>
    </parametros>
    <contas>
-     <conta codigoConta="123" valorConta="5.75"/>
-     <conta codigoConta="456" valorConta="15.10">
+     <conta codigoConta="503000" valorConta="5.75"/>
+     <conta codigoConta="121000" valorConta="15.10">
        <detalhamentosDDR>
          <detalhamentoDDR valorDetalhe="10.00">
            <detalhe codigoElemento="83" valorElemento="USD"/>

@@ -24,7 +24,9 @@ using XML2011
  @test XML2011.get_valor(c2, [XML2011.Posicao(:offshore), XML2011.Moeda(:EUR)]) ==  5.10 # ordem inversa
  @test_throws ErrorException XML2011.get_valor(c2, [XML2011.Posicao(:offshore), XML2011.Moeda(:JPY)]) # inexiste
 
- doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1 c2])
+ c3 = XML2011.Conta("410400", 5.75)
+ c4 = XML2011.Conta("410401", 5.75)
+ doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1 c2 c3 c4])
 
  io = IOBuffer()
  XML2011.write_xml(io, doc)
@@ -51,6 +53,8 @@ using XML2011
          </detalhamentoDDR>
        </detalhamentosDDR>
      </conta>
+     <conta codigoConta="410400" valorConta="5.75"/>
+     <conta codigoConta="410401" valorConta="5.75"/>
    </contas>
  </documentoDDR>
  """
@@ -76,3 +80,18 @@ using XML2011
  @test XML2011.Moeda(:USD) == XML2011.Moeda(:USD)
  @test XML2011.Moeda(:USD) != XML2011.Moeda(:EUR)
  @test XML2011.Moeda(:USD) != XML2011.Posicao(:onshore)
+
+
+## Validacao de formula
+# "310000" => doc -> get_valor(doc, "310100") * (get_valor(doc, "310105")/100)
+v = Vector{XML2011.Conta}()
+c1 = XML2011.Conta("310100", 1000.0)
+c2 = XML2011.Conta("310105", 90.0)
+c3 = XML2011.Conta("310000", 1000.0 * (90/100))
+c3_wrong = XML2011.Conta("310000", 1000.0 * (89/100))
+c4 = XML2011.Conta("310101", 700.0)
+c5 = XML2011.Conta("310104", 300.0)
+
+doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1 c2 c3 c4 c5])
+
+@test_throws AssertionError XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1 c2 c3_wrong c4 c5])

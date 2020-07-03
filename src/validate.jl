@@ -9,6 +9,7 @@ end
 
 function validar_documento(doc::Doc2011)
 	assert_contas_repetidas(doc)
+	assert_formulas(doc)
 end
 
 function validar_conta(conta::Conta)
@@ -176,4 +177,36 @@ function assert_elementos_detalhe(codigo::String, detalhe::DetalheConta)
 	for t in tipos
 		@assert t in gabarito "conta $codigo: elemento detalhe invalido ($t)"
 	end
+end
+
+FORMULAS = Dict{String, Function}([
+	"310000" => d -> get_valor(d, "310100") * (get_valor(d, "310105")/100)
+	"310100" => d -> get_valor(d, "310101", 0.0) + get_valor(d, "310102", 0.0) + get_valor(d, "310103", 0.0) + get_valor(d, "310104", 0.0)
+	"410100" => d -> 100.0
+	"410200" => d -> get_valor(d, "410201", 0.0) + get_valor(d, "410202", 0.0)
+	"410300" => d -> get_valor(d, "410301", 0.0) + get_valor(d, "410302", 0.0)
+	"410400" => d -> get_valor(d, "410401", 0.0) + get_valor(d, "410402", 0.0)
+	"410500" => d -> get_valor(d, "410501", 0.0) + get_valor(d, "410502", 0.0) + get_valor(d, "410503", 0.0) + get_valor(d, "410504", 0.0)
+	"410600" => d -> get_valor(d, "410601", 0.0) + get_valor(d, "410602", 0.0) + get_valor(d, "410603", 0.0) + get_valor(d, "410604", 0.0)
+	"410700" => d -> get_valor(d, "410701", 0.0) + get_valor(d, "410702", 0.0) + get_valor(d, "410703", 0.0) + get_valor(d, "410704", 0.0)
+	"410800" => d -> get_valor(d, "410801", 0.0) + get_valor(d, "410802", 0.0)
+	"410900" => d -> get_valor(d, "410901", 0.0) + get_valor(d, "410904", 0.0) + get_valor(d, "410907", 0.0) + get_valor(d, "410908", 0.0) + get_valor(d, "410909", 0.0) + get_valor(d, "410910", 0.0)
+	"503000" => d -> get_valor(d, "310000", 0.0) + get_valor(d, "410400", 0.0) + get_valor(d, "410500", 0.0) + get_valor(d, "410600", 0.0) + get_valor(d, "410700", 0.0) + get_valor(d, "410800", 0.0) + get_valor(d, "410900", 0.0)
+	"620000" => d -> get_valor(d, "620200", 0.0) + get_valor(d, "620300", 0.0) + get_valor(d, "620400", 0.0) + get_valor(d, "620500", 0.0) - get_valor(d, "620100", 0.0)
+	"620500" => d -> get_valor(d, "620502", 0.0) + get_valor(d, "620503", 0.0) + get_valor(d, "620504", 0.0) + get_valor(d, "620505", 0.0) - get_valor(d, "620501", 0.0)
+	"630000" => d -> get_valor(d, "630200", 0.0) + get_valor(d, "630300", 0.0) + get_valor(d, "630400", 0.0) + get_valor(d, "630500", 0.0) - get_valor(d, "630100", 0.0)
+	"630500" => d -> get_valor(d, "630502", 0.0) + get_valor(d, "630503", 0.0) + get_valor(d, "630504", 0.0) + get_valor(d, "630505", 0.0) - get_valor(d, "630501", 0.0)
+	"710000" => d -> max(get_valor(d, "610000", 0.0) + get_valor(d, "505000", 0.0),  (get_valor(d, "504000")/100) * get_valor(d, "503000", 0.0))
+])
+
+function assert_formulas(doc::Doc2011)
+
+	for (codigo, fun) in FORMULAS
+		if has_conta(doc, codigo)
+			stored = get_valor(doc, codigo)
+			evaluated = fun(doc)
+			@assert stored ≈ evaluated "conta $codigo: valor informado ($stored) nao bate com o valor da formula ($evaluated)"
+		end
+	end
+
 end

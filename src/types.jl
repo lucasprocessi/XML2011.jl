@@ -93,3 +93,31 @@ struct Doc2011
         return doc
     end
 end
+
+function get_conta(doc::Doc2011, codigo::String)
+    for conta in doc.contas
+        if conta.codigo == codigo
+            return conta
+        end
+    end
+    error("conta $codigo inexistente")
+end
+
+function has_conta(doc::Doc2011, codigo::String)
+    for conta in doc.contas
+        if conta.codigo == codigo
+            return true
+        end
+    end
+    return false
+end
+
+get_valor(doc::Doc2011, codigo::String) = get_valor(get_conta(doc, codigo))
+
+function get_valor(doc::Doc2011, codigo::String, default::Float64)
+    if has_conta(doc, codigo)
+        return get_valor(doc, codigo)
+    else
+        return default
+    end
+end

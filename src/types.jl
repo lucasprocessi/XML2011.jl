@@ -7,6 +7,7 @@ struct Moeda <: ElementoDetalhe
         @assert codigo in CONST_MOEDAS "moeda invalida: $codigo"
         new(codigo)
     end
+    Moeda(codigo::String) = Moeda(Symbol(codigo))
 end
 struct Posicao <: ElementoDetalhe
     codigo::Symbol
@@ -14,6 +15,16 @@ struct Posicao <: ElementoDetalhe
         global CONST_POSICOES
         @assert codigo in CONST_POSICOES "posicao invalida: $codigo. should be :onshore or :offshore"
         new(codigo)
+    end
+    "1 = :onshore, 2 = :offshore"
+    function Posicao(codigo::String)
+        if codigo == "1"
+            return Posicao(:onshore)
+        elseif codigo == "2"
+            return Posicao(:offshore)
+        else
+            error("codigo deve ser \"1\" ou \"2\"")
+        end
     end
 end
 struct Pais <: ElementoDetalhe
@@ -23,6 +34,7 @@ struct Pais <: ElementoDetalhe
         @assert codigo in CONST_PAISES "pais invalido: $codigo"
         new(codigo)
     end
+    Pais(codigo::String) = Pais(Symbol(codigo))
 end
 
 struct DetalheConta
@@ -80,14 +92,23 @@ struct Inclusao <: TipoEnvio end
 encode(tipo::Inclusao)::String = "I"
 struct Substituicao <: TipoEnvio end
 encode(tipo::Substituicao)::String = "S"
+function decode_tipo_envio(tipo::String)
+    if tipo == "I"
+        return Inclusao()
+    elseif tipo == "S"
+        return Substituicao()
+    else
+        error("tipo envio invalido: $tipo")
+    end
+end
 
 struct Doc2011
     data::Date
     cnpj::String
     tipo::TipoEnvio
     responsavel::Responsavel
-    contas::Array{Conta}
-    function Doc2011(data::Date, cnpj::String, tipo::TipoEnvio, responsavel::Responsavel, contas::Array{Conta})
+    contas::Vector{Conta}
+    function Doc2011(data::Date, cnpj::String, tipo::TipoEnvio, responsavel::Responsavel, contas::Vector{Conta})
         doc = new(data, cnpj, tipo, responsavel, contas)
         validar(doc)
         return doc

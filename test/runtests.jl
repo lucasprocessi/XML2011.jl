@@ -26,7 +26,7 @@ using XML2011
 
  c3 = XML2011.Conta("410400", 5.75)
  c4 = XML2011.Conta("410401", 5.75)
- doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1 c2 c3 c4])
+ doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1, c2, c3, c4])
 
  io = IOBuffer()
  XML2011.write_xml(io, doc)
@@ -76,6 +76,23 @@ using XML2011
 
  @test is_equal(parsexml(xml_test), parsexml(xml_written))
 
+
+#### TESTES READ
+# Parse String
+doc_read1 = XML2011.parse_xml(xml_test)
+
+# Read File
+file = "ddr.xml"
+XML2011.write_xml(file, doc_read1)
+doc_read2 = XML2011.read_xml(file)
+rm(file)
+
+# Comparar
+b1 = IOBuffer(); XML2011.write_xml(b1, doc_read1); s1 = String(take!(b1))
+b2 = IOBuffer(); XML2011.write_xml(b2, doc_read2); s2 = String(take!(b2))
+@test s1 == s2
+
+
  #### TESTES GENERICOS
  @test XML2011.Moeda(:USD) == XML2011.Moeda(:USD)
  @test XML2011.Moeda(:USD) != XML2011.Moeda(:EUR)
@@ -92,6 +109,6 @@ c3_wrong = XML2011.Conta("310000", 1000.0 * (89/100))
 c4 = XML2011.Conta("310101", 700.0)
 c5 = XML2011.Conta("310104", 300.0)
 
-doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1 c2 c3 c4 c5])
+doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1, c2, c3, c4, c5])
 
-@test_throws AssertionError XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1 c2 c3_wrong c4 c5])
+@test_throws AssertionError XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1, c2, c3_wrong, c4, c5])

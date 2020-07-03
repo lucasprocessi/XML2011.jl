@@ -32,7 +32,7 @@ c2 = XML2011.Conta(
 c3 = XML2011.Conta("410400", 5.75)
 c4 = XML2011.Conta("410401", 5.75)
 
-doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1 c2 c3 c4])
+doc = XML2011.Doc2011(data, cnpj, tipo, responsavel, [c1, c2, c3, c4])
 
 # writes to file ddr.xml
 XML2011.write_xml("ddr.xml", doc)

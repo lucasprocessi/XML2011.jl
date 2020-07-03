@@ -53,7 +53,7 @@ struct Conta
     function Conta(codigo::String, valor::Float64, detalhes::Vector{DetalheConta})
         if length(detalhes) > 0
             sum_detalhes = sum([d.valor for d in detalhes])
-            @assert valor == sum_detalhes "Conta XML2011: soma dos detalhes ($sum_detalhes) deve ser igual ao valor ($valor)"
+            @assert valor ≈ sum_detalhes "Conta XML2011: soma dos detalhes ($sum_detalhes) deve ser igual ao valor ($valor)"
         end
         return new(codigo, valor, detalhes)
     end

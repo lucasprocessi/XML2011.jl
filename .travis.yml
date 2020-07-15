@@ -3,7 +3,9 @@ language: julia
 os:
   - linux
 julia:
+  - 1.0
   - 1.4
+  - 1
 env:
   - JULIA_PROJECT="@."
 notifications:

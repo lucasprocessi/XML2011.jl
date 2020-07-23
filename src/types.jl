@@ -77,12 +77,14 @@ function get_valor(conta::Conta, query::Vector{ElementoDetalhe})
     error("valor nao encontrado para os criterios $query")
 end
 
+const EMAIL_PATTERN = r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$"i
+
 struct Responsavel
     nome::String
     telefone::String
     email::String
     function Responsavel(nome::String, telefone::String, email::String)
-        # TODO: validar telefone e email
+        @assert occursin(EMAIL_PATTERN, email) "email invalido"
         return new(nome, telefone, email)
     end
 end
